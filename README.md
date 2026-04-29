@@ -1,1 +1,1 @@
-# coinly.github.io
+# playthium.github.io
