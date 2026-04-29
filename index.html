@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coinly</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="logo.png" alt="Coinly logo" class="brand-logo">
+      <span>Coinly</span>
+    </div>
+    <div class="balance" data-i18n="header.balance">Peněženka: <span id="balance">1000</span> Kč</div>
+    <div class="header-actions">
+      <div class="language-selector">
+        <select id="languageSelect">
+          <option value="cs">Čeština</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="sk">Slovenčina</option>
+          <option value="ru">Русский</option>
+        </select>
+      </div>
+      <div class="auth-buttons">
+        <button id="settingsBtn" class="secondary">⚙ Nastavení</button>
+        <button id="registerHeaderBtn" class="secondary">Registrovat se</button>
+        <button id="loginBtn" class="primary" data-i18n="header.login">Přihlásit se</button>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <button data-target="home" class="active" data-i18n="nav.home">Domů</button>
+    <button data-target="snake" data-i18n="nav.snake">Had</button>
+    <button data-target="casino" data-i18n="nav.casino">Casino</button>
+    <button data-target="hotel" data-i18n="nav.hotel">Hotel</button>
+    <button data-target="crypto" data-i18n="nav.crypto">Krypto</button>
+    <button data-target="clicker" data-i18n="nav.clicker">Reflexi</button>
+    <button data-target="guessing" data-i18n="nav.guessing">Hádání čísel</button>
+    <button data-target="leaderboard" data-i18n="nav.leaderboard">Leaderboard</button>
+  </nav>
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2 data-i18n="login.title">Přihlášení</h2>
+      <input type="text" id="usernameInput" placeholder="Zadej uživatelské jméno" data-i18n-placeholder="login.username">
+      <input type="password" id="passwordInput" placeholder="Zadej heslo" data-i18n-placeholder="login.password">
+      <input type="password" id="confirmPasswordInput" placeholder="Potvrď heslo" data-i18n-placeholder="login.confirmPassword" class="hidden">
+      <div class="login-checkbox">
+        <label><input type="checkbox" id="stayLoggedIn"><span>Zůstat přihlášen</span></label>
+      </div>
+      <button id="loginButton" data-i18n="login.loginBtn">Přihlásit se</button>
+      <button id="registerButton" data-i18n="login.registerBtn">Registrovat se</button>
+      <button id="closeLogin" class="secondary">Zavřít</button>
+      <p id="loginError"></p>
+    </div>
+  </div>
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <h2>Nastavení</h2>
+      <div class="settings-panel">
+        <label><input type="checkbox" id="soundToggle"> Zvukové efekty</label>
+        <label><input type="checkbox" id="musicToggle"> Hudba na pozadí</label>
+        <label><input type="checkbox" id="darkModeToggle"> Tmavý motiv</label>
+      </div>
+      <button id="closeSettings" class="secondary">Zavřít</button>
+    </div>
+  </div>
+  <main>
+    <section id="home" class="page active hero-page">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="hero-eyebrow">Coinly</span>
+          <h1 data-i18n="hero.title">Hraj a vydělávej herní peníze</h1>
+          <div class="hero-cta">
+            <div class="hero-actions">
+              <button id="heroPlay" data-i18n="hero.play">Hrát</button>
+              <button id="heroCasino" data-target="casino" data-i18n="hero.visitCasino">Navštívit casino</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-features home-features">
+        <article>
+          <h2 data-i18n="features.snake.title">Had</h2>
+          <p data-i18n="features.snake.desc">Rychlá arkáda s ovládáním šipkami i WASD.</p>
+        </article>
+        <article>
+          <h2 data-i18n="features.casino.title">Casino</h2>
+          <p data-i18n="features.casino.desc">Riskuj sázky a získej výhry v ruletě nebo automatech.</p>
+        </article>
+        <article>
+          <h2 data-i18n="features.hotel.title">Hotel</h2>
+          <p data-i18n="features.hotel.desc">Kupuj pokoje a sbírej pasivní příjem za noc.</p>
+        </article>
+        <article>
+          <h2 data-i18n="features.clicker.title">Reflexi</h2>
+          <p data-i18n="features.clicker.desc">Testuj svou dobu reakce a získej bonusové peníze za rychlé reflexy.</p>
+        </article>
+        <article>
+          <h2 data-i18n="features.guessing.title">Hádání čísel</h2>
+          <p data-i18n="features.guessing.desc">Uhodni číslo od 1 do 100 a získej 500 Kč.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="snake" class="page">
+      <h1 data-i18n="snake.title">Had</h1>
+      <div class="snake-panel">
+        <canvas id="snakeCanvas" width="320" height="320" tabindex="0"></canvas>
+        <div class="snake-controls">
+          <p>Peníze: <span id="snakeScore">0</span> Kč</p>
+          <button id="snakeStart" data-i18n="snake.start">Spustit hru</button>
+          <p data-i18n="snake.controls">Ovládání: šipky nebo WASD</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="casino" class="page">
+      <h1 data-i18n="casino.title">Casino</h1>
+      <div class="casino-panel">
+        <label for="betAmount" data-i18n="casino.bet">Sázka:</label>
+        <input type="number" id="betAmount" value="100" min="10" step="10">
+        <div class="casino-actions">
+          <button id="playRoulette" data-i18n="casino.roulette">Točit ruletu</button>
+          <button id="playSlots" data-i18n="casino.slots">Hrací automat</button>
+        </div>
+        <p id="casinoResult"></p>
+      </div>
+    </section>
+
+    <section id="hotel" class="page">
+      <h1 data-i18n="hotel.title">Hotel</h1>
+      <div class="hotel-panel">
+        <div class="hotel-upgrades">
+          <h2 data-i18n="hotel.upgrades">Upgrady</h2>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.kitchen">Kuchyně: <span id="hotelKitchen">ne</span> (Level <span id="kitchenLevel">0</span>)</span>
+            <button id="buyKitchen" class="hidden" data-i18n="hotel.buyKitchen">Koupit kuchyni za 3000 Kč</button>
+            <button id="upgradeKitchen" class="hidden" data-i18n="hotel.upgradeKitchen">Vylepšit kuchyni za 5000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.cookbook">Kuchařka: <span id="hotelCookbook">ne</span> (Level <span id="cookbookLevel">0</span>)</span>
+            <button id="buyCookbook" class="hidden" data-i18n="hotel.buyCookbook">Koupit kuchařku za 1200 Kč</button>
+            <button id="upgradeCookbook" class="hidden" data-i18n="hotel.upgradeCookbook">Vylepšit kuchařku za 2000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.pool">Bazén: <span id="hotelPool">ne</span> (Level <span id="poolLevel">0</span>)</span>
+            <button id="buyPool" class="hidden" data-i18n="hotel.buyPool">Koupit bazén za 4000 Kč</button>
+            <button id="upgradePool" class="hidden" data-i18n="hotel.upgradePool">Vylepšit bazén za 6000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.reception">Recepce: <span id="hotelReception">ne</span> (Level <span id="receptionLevel">0</span>)</span>
+            <button id="buyReception" class="hidden" data-i18n="hotel.buyReception">Koupit recepci za 2500 Kč</button>
+            <button id="upgradeReception" class="hidden" data-i18n="hotel.upgradeReception">Vylepšit recepci za 4000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.wellness">Wellness: <span id="hotelWellness">ne</span> (Level <span id="wellnessLevel">0</span>)</span>
+            <button id="buyWellness" class="hidden" data-i18n="hotel.buyWellness">Koupit wellness za 6000 Kč</button>
+            <button id="upgradeWellness" class="hidden" data-i18n="hotel.upgradeWellness">Vylepšit wellness za 9000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span data-i18n="hotel.parking">Parkování: <span id="hotelParking">ne</span> (Level <span id="parkingLevel">0</span>)</span>
+            <button id="buyParking" class="hidden" data-i18n="hotel.buyParking">Koupit parkování za 2000 Kč</button>
+            <button id="upgradeParking" class="hidden" data-i18n="hotel.upgradeParking">Vylepšit parkování za 3000 Kč</button>
+          </div>
+          <div class="upgrade-item">
+            <span>Uklízečka: <span id="hotelCleaner">ne</span> (Level <span id="cleanerLevel">0</span>)</span>
+            <button id="buyCleaner" class="hidden" data-i18n="hotel.buyCleaner">Koupit uklízečku za 1500 Kč</button>
+            <button id="upgradeCleaner" class="hidden" data-i18n="hotel.upgradeCleaner">Vylepšit uklízečku za 2500 Kč</button>
+          </div>
+        </div>
+        <div class="hotel-actions">
+          <p>Stav: <span id="hotelState">Žádný hotel</span></p>
+          <p>Příjem za noc: <span id="hotelIncome">0</span> Kč</p>
+          <p id="nextIncomeTimer">Další příjem za: --:--:--</p>
+          <button id="buyBrokenHotel" data-i18n="hotel.buyBroken">Koupit rozbitý hotel za 5000 Kč</button>
+          <button id="repairHotel" class="hidden" data-i18n="hotel.repair">Opravit hotel za 5000 Kč</button>
+          <button id="buyLargeHotel" class="hidden" data-i18n="hotel.buyLargeHotel">Koupit větší hotel za 20000 Kč</button>
+        </div>
+        <p id="hotelResult"></p>
+      </div>
+      <p data-i18n="hotel.instruction">Nejdříve musíš koupit rozbitý hotel, opravit ho a pak můžeš investovat do různých upgradů pro zvýšení příjmu.</p>
+    </section>
+
+    <section id="crypto" class="page">
+      <h1 data-i18n="crypto.title">Krypto</h1>
+      <div class="crypto-panel">
+        <div class="crypto-list">
+          <article class="crypto-item">
+            <h2>Bitcoin</h2>
+            <p>Cena: <span id="btcPrice">50000</span> Kč | Vlastníš: <span id="btcOwned">0</span></p>
+            <canvas id="btcChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountBTC" min="1" placeholder="Množství" value="1">
+              <button id="buyBTC" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellBTC" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+          <article class="crypto-item">
+            <h2>Ethereum</h2>
+            <p>Cena: <span id="ethPrice">3000</span> Kč | Vlastníš: <span id="ethOwned">0</span></p>
+            <canvas id="ethChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountETH" min="1" placeholder="Množství" value="1">
+              <button id="buyETH" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellETH" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+          <article class="crypto-item">
+            <h2>Litecoin</h2>
+            <p>Cena: <span id="ltcPrice">150</span> Kč | Vlastníš: <span id="ltcOwned">0</span></p>
+            <canvas id="ltcChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountLTC" min="1" placeholder="Množství" value="1">
+              <button id="buyLTC" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellLTC" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+          <article class="crypto-item">
+            <h2>Ripple</h2>
+            <p>Cena: <span id="xrpPrice">0.5</span> Kč | Vlastníš: <span id="xrpOwned">0</span></p>
+            <canvas id="xrpChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountXRP" min="1" placeholder="Množství" value="1">
+              <button id="buyXRP" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellXRP" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+          <article class="crypto-item">
+            <h2>Cardano</h2>
+            <p>Cena: <span id="adaPrice">1.2</span> Kč | Vlastníš: <span id="adaOwned">0</span></p>
+            <canvas id="adaChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountADA" min="1" placeholder="Množství" value="1">
+              <button id="buyADA" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellADA" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+          <article class="crypto-item">
+            <h2>Solana</h2>
+            <p>Cena: <span id="solPrice">100</span> Kč | Vlastníš: <span id="solOwned">0</span></p>
+            <canvas id="solChart" width="250" height="80"></canvas>
+            <div class="crypto-trade">
+              <input type="number" id="buyAmountSOL" min="1" placeholder="Množství" value="1">
+              <button id="buySOL" data-i18n="crypto.buy">Koupit</button>
+              <button id="sellSOL" data-i18n="crypto.sell">Prodat</button>
+            </div>
+          </article>
+        </div>
+        <p id="cryptoResult"></p>
+      </div>
+    </section>
+  </main>
+  <section id="clicker" class="page">
+    <h1 data-i18n="clicker.title">Hra na reflexi</h1>
+    <div class="clicker-panel">
+      <div id="reactionBox" class="reaction-box"></div>
+      <p id="reactionStatus" data-i18n="clicker.waiting">Čekej na zelený box...</p>
+      <p>Poslední čas: <span id="reactionTime">-</span> ms</p>
+      <p>Nejlepší čas: <span id="bestReactionTime">-</span> ms</p>
+      <p>Výdělky: <span id="reactionReward">0</span> Kč</p>
+      <button id="startReaction" data-i18n="clicker.start">Spustit hru</button>
+      <p id="clickerResult"></p>
+    </div>
+  </section>
+
+  <section id="guessing" class="page">
+    <h1 data-i18n="guessing.title">Hádání čísel</h1>
+    <div class="guessing-panel">
+      <p data-i18n="guessing.instruction">Uhodni číslo od 1 do 100:</p>
+      <input type="number" id="guessInput" min="1" max="100">
+      <button id="guessButton" data-i18n="guessing.guess">Hádat</button>
+      <p id="guessResult"></p>
+      <p>Pokusy: <span id="guessAttempts">0</span></p>
+      <p data-i18n="guessing.prize">Výhra: 500 Kč za správný tip</p>
+    </div>
+  </section>
+  <section id="leaderboard" class="page">
+    <h1 data-i18n="leaderboard.title">Leaderboard</h1>
+    <div class="leaderboard-panel">
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.snake">Nejlepší skóre v Hadovi</h2>
+        <ol id="snakeLeaderboard"></ol>
+      </div>
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.casino">Největší casino výhry</h2>
+        <ol id="casinoLeaderboard"></ol>
+      </div>
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.hotel">Nejlepší hotelové příjmy</h2>
+        <ol id="hotelLeaderboard"></ol>
+      </div>
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.crypto">Největší krypto portfolio</h2>
+        <ol id="cryptoLeaderboard"></ol>
+      </div>
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.reflexi">Nejrychlejší reflexy</h2>
+        <ol id="reflexiLeaderboard"></ol>
+      </div>
+      <div class="leaderboard-card">
+        <h2 data-i18n="leaderboard.guessing">Nejlepší hádači</h2>
+        <ol id="guessingLeaderboard"></ol>
+      </div>
+    </div>
+  </section>
+  <script src="script.js"></script>
+</body>
+</html>
