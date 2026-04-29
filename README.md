@@ -1,1 +1,1 @@
-# Coinly
+# Coinly.github.io
